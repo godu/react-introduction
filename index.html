@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Awesome Presentation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+      body {
+        font-family: 'Droid Serif';
+      }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: 400;
+        margin-bottom: 0;
+      }
+      .remark-slide-content h1 { font-size: 3em; }
+      .remark-slide-content h2 { font-size: 2em; }
+      .remark-slide-content h3 { font-size: 1.6em; }
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+      }
+      .remark-slide-content img {
+        max-width: 100%;
+      }
+      li p { line-height: 1.25em; }
+      .red { color: #fa0000; }
+      .large { font-size: 2em; }
+      a, a > code {
+        color: rgb(249, 38, 114);
+        text-decoration: none;
+      }
+      code {
+        background: #e7e8e2;
+        border-radius: 5px;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-code-line-highlighted     { background-color: #373832; }
+      .pull-left {
+        float: left;
+        width: 47%;
+      }
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+      .pull-right ~ p {
+        clear: both;
+      }
+      #slideshow .slide .content code {
+        font-size: 0.8em;
+      }
+      #slideshow .slide .content pre code {
+        font-size: 0.9em;
+        padding: 15px;
+      }
+      .inverse {
+        background: #272822;
+        color: #777872;
+        text-shadow: 0 0 20px #333;
+      }
+      .inverse h1, .inverse h2 {
+        color: #f3f3f3;
+        line-height: 0.8em;
+      }
+      /* Slide-specific styling */
+      #slide-inverse .footnote {
+        bottom: 12px;
+        left: 20px;
+      }
+      #slide-how .slides {
+        font-size: 0.9em;
+        position: absolute;
+        top:  151px;
+        right: 140px;
+      }
+      #slide-how .slides h3 {
+        margin-top: 0.2em;
+      }
+      #slide-how .slides .first, #slide-how .slides .second {
+        padding: 1px 20px;
+        height: 90px;
+        width: 120px;
+        -moz-box-shadow: 0 0 10px #777;
+        -webkit-box-shadow: 0 0 10px #777;
+        box-shadow: 0 0 10px #777;
+      }
+      #slide-how .slides .first {
+        background: #fff;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        z-index: 1;
+      }
+      #slide-how .slides .second {
+        position: relative;
+        background: #fff;
+        z-index: 0;
+      }
+      /* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: middle
+layout: true
+---
+class:center
+
+# React
+
+---
+
+## Just the UI
+
+Lots of people use React as the V in MVC. Since React makes no assumptions about the rest of your technology stack, it's easy to try it out on a small feature in an existing project.
+
+```javascript
+class HelloMessage extends React.Component
+  render() {
+    return <div>Hello {this.props.name}</div>;
+  }
+});
+
+ReactDOM.render(<HelloMessage name="John" />, mountNode);
+```
+
+https://facebook.github.io/react/
+---
+
+## Virtual DOM
+
+React abstracts away the DOM from you, giving a simpler programming model and better performance. React can also render on the server using Node, and it can power native apps using React Native.
+
+![Diff virtual DOM](./diff-virtual-dom.png)
+
+http://blog.vjeux.com/2013/javascript/react-performance.html
+---
+
+## Data flow
+
+React implements one-way reactive data flow which reduces boilerplate and is easier to reason about than traditional data binding.
+
+![Data flow](./react_native_lifecycle.png)
+
+https://code-cartoons.com/
+---
+
+# From scratch to React
+
+---
+
+# Classic template engine
+
+```javascript
+import _ from 'lodash';
+
+const template = _.template(`
+  <div>
+    <button>
+      <%= title %>
+    </button>
+  </div>
+`);
+
+const node = document.getElementById('app');
+node.innerHTML = template({
+  title: 'Yolo'
+});
+node.addEventListener('click', () => alert('yolo'), false);
+```
+
+---
+
+# React in plain javascript
+
+```javascript
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const template = (props) => {
+  return (
+    React.createElement('div', {}, [
+      React.createElement('button', { onClick: handleClick },
+        'yolo'
+      )
+    ])
+  );
+};
+
+ReactDOM.render(template({
+  title: 'yolo',
+  handleClick: () => alert('yolo')
+}), document.getElementById('app'));
+```
+
+---
+
+# React in JSX
+
+```javascript
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const template = (props) => (
+  <div>
+    <button onClick={ handleClick }>
+      { props.title }
+    </button>
+  </div>
+);
+
+ReactDOM.render(template({
+  title: 'yolo',
+  handleClick: () => alert('yolo')
+}), document.getElementById('app'));
+```
+
+---
+
+# React Elements
+
+An element is a plain object describing what you want to appear on the screen in terms of the DOM nodes or other components. Elements can contain other elements in their props.
+
+```javascript
+React.createElement('div', {}, [
+  React.createElement('button', { onClick: handleClick },
+    'yolo'
+  )
+])
+```
+
+```javascript
+( <div>
+    <button onClick={ handleClick }>
+      yolo
+    </button>
+  </div> )
+```
+
+---
+
+# React Elements
+
+```javascript
+{
+  style: 'div',
+  props: {
+    children: [{
+      style: 'button',
+      props: {
+        onClick: handleClick
+        children: 'yolo'
+      }
+    }]
+  }
+}
+```
+
+---
+
+# React Components
+
+A component can be two things.
+
+- It can be a class with a render() method that inherits from React.Component .
+- Or it can be a function.
+
+In both cases, it takes props as an input, and returns an element tree as the output.
+
+---
+
+# React Components
+
+```javascript
+const Button = (props) => (
+  <div>
+    <button onClick={ handleClick }>
+      { props.title }
+    </button>
+  </div>
+);
+```
+
+```javascript
+class Button extends React.Component {
+  render() {
+    return (
+      <div>
+        <button onClick={ handleClick }>
+          { this.props.title }
+        </button>
+      </div>
+    );
+  }
+};
+```
+
+---
+
+# Composition
+
+.pull-left[
+```javascript
+const Field = (props) => (
+  <div>
+    <label for={ props.name }>
+      {props.title}
+    </label>
+    <input
+      id={ props.name }
+      type={ props.type || 'text' }
+      onChange={ props.onChange }
+    />
+  </div>
+);
+```
+]
+
+.pull-right[
+```javascript
+const LoginForm = (props) => (
+  <form>
+    <Field
+      title="Username"
+      name="login-form-username"
+    />
+    <Field
+      title="Password"
+      type="password"
+      name="login-form-password"
+    />
+    <input
+      type="submit"
+    />
+  </form>
+);
+```
+]
+---
+
+# Wrapper
+
+```javascript
+const Modal = (props) => (
+  <div className={ style.Modal }>
+    { this.children }
+  </div>
+);
+
+const SignUpPopin = (props) => (
+  <Modal>
+    <LoginForm/>
+  </Modal>
+);
+```
+
+---
+
+# Without DOM representation
+
+```javascript
+const setColor = (color)
+  => (element)
+    => React.cloneElement(element, {style: {color: color}});
+
+const ColorElement = (props)
+  => React.Children.map(props.children, setColor(props.color);
+```
+
+```javascript
+const BlueElement = (props) => (
+  <ColorElement color="blue">
+  { this.children }
+  </ColorElement>
+);
+
+const RedElement = (props) => (
+  <ColorElement color="red">
+  { this.children }
+  </ColorElement>
+);
+```
+
+---
+
+# /!\ Stateful Components /!\
+
+```javascript
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: props.count || 0
+    };
+  }
+
+  handleClick() {
+    this.setState({
+      count: this.state.count + 1
+    });
+  }
+
+  render() {
+    return (
+      <div
+        onClick={this.handleClick.bind(this)}>
+        {this.state.count}
+      </div>
+    );
+  }
+};
+```
+
+---
+
+# Component Lifecycle
+
+Components have three main parts of their lifecycle:
+
+- **Mounting**: A component is being inserted into the DOM.
+- **Updating**: A component is being re-rendered to determine if the DOM should be updated.
+- **Unmounting**: A component is being removed from the DOM.
+
+```javascript
+
+
+class MyComponent extends React.Component {
+  componentWillMount() {}
+  componentDidMount() {}
+  componentWillUpdate() {},
+  componentDidUpdate() {},
+  componentWillUnmount() {}
+  render() {
+    return ( <div>Hello World</div> );
+  }
+}
+```
+
+[Documentation](https://facebook.github.io/react/docs/component-specs.html)
+
+---
+
+# Universal application
+
+![Universal application](./isomorphic_code_share.png)
+
+---
+
+# Universal application
+
+```javascript
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class MyComponent extends React.Component {
+  render() {
+    return ( <div>Hello World</div> );
+  }
+}
+
+ReactDOM.render(<MyComponent />, node);
+```
+
+```javascript
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
+
+class MyComponent extends React.Component {
+  render() {
+    return ( <div>Hello World</div> );
+  }
+}
+
+ReactDOMServer.renderToString(<MyComponent />);
+```
+
+---
+
+# React Native (IOS / Android)
+
+```javascript
+import React form 'react-native';
+const { TabBarIOS, NavigatorIOS } = React;
+
+var App = React.createClass({
+  render: function() {
+    return (
+      <TabBarIOS>
+        <TabBarIOS.Item
+          title="React Native"
+          selected={true}
+        >
+          <NavigatorIOS
+            initialRoute={{ title: 'React Native' }}
+          />
+        </TabBarIOS.Item>
+      </TabBarIOS>
+    );
+  }
+});
+```
+
+---
+
+# Thank you !
+
+- [React Components, Elements, and Instances](https://medium.com/@dan_abramov/react-components-elements-and-instances-90800811f8ca)
+- [Smart and Dumb Components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0)
+
+    </textarea>
+    <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+    <script>
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script src="http://gnab.github.io/remark/remark.language.js"></script>
+    <script>
+      var slideshow = remark.create({
+        highlightStyle: 'monokai',
+        highlightLanguage: 'remark',
+        highlightLines: true
+      }) ;
+    </script>
+  </body>
+</html>
